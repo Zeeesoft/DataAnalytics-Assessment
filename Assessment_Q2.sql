@@ -4,7 +4,7 @@
 -- ================================================
 
 WITH customer_transactions AS (
-    --CTE to Get transaction count and activity window per customer
+    -- Step 1: Aggregate total transactions and find activity window per customer
     SELECT 
         s.owner_id,
         COUNT(*) AS total_transactions,
@@ -19,7 +19,7 @@ WITH customer_transactions AS (
 ),
 
 transactions_per_month AS (
-    -- Calculate tenure in months and average monthly frequency
+    -- Step 2: Calculate tenure in months and average monthly transaction frequency
     SELECT 
         c.owner_id,
         u.name,
@@ -28,12 +28,14 @@ transactions_per_month AS (
         ROUND(c.total_transactions / GREATEST(TIMESTAMPDIFF(MONTH, c.first_transaction, c.last_transaction), 1), 2) AS avg_transactions_per_month
     FROM 
         customer_transactions c
+
+    -- Join user metadata to enhance report with customer name
     JOIN 
         users_customuser u ON u.id = c.owner_id
 ),
 
 categorized AS (
-    -- Categorize customers based on transaction frequency
+    -- Step 3: Categorize customers based on frequency brackets
     SELECT 
         *,
         CASE 
@@ -45,7 +47,7 @@ categorized AS (
         transactions_per_month
 )
 
--- Aggregate results by frequency category
+-- Step 4: Aggregate final results by frequency category
 SELECT 
     frequency_category,
     COUNT(*) AS customer_count,
@@ -54,6 +56,5 @@ FROM
     categorized
 GROUP BY 
     frequency_category
--- Ensure logical display order
 ORDER BY 
     FIELD(frequency_category, 'High Frequency', 'Medium Frequency', 'Low Frequency');
