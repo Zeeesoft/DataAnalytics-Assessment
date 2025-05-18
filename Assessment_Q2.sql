@@ -1,5 +1,10 @@
--- Analyze average transaction frequency and categorize customers
+-- ================================================
+-- Q2: Classify customers by average transaction frequency
+--     and group them into frequency categories
+-- ================================================
+
 WITH customer_transactions AS (
+    --CTE to Get transaction count and activity window per customer
     SELECT 
         s.owner_id,
         COUNT(*) AS total_transactions,
@@ -12,26 +17,23 @@ WITH customer_transactions AS (
     GROUP BY 
         s.owner_id
 ),
+
 transactions_per_month AS (
+    -- Calculate tenure in months and average monthly frequency
     SELECT 
         c.owner_id,
         u.name,
         c.total_transactions,
-        -- Calculate account tenure in months, ensure minimum of 1 month
-        GREATEST(
-            TIMESTAMPDIFF(MONTH, c.first_transaction, c.last_transaction), 
-            1
-        ) AS tenure_months,
-        ROUND(c.total_transactions / GREATEST(
-            TIMESTAMPDIFF(MONTH, c.first_transaction, c.last_transaction), 
-            1
-        ), 2) AS avg_transactions_per_month
+        GREATEST(TIMESTAMPDIFF(MONTH, c.first_transaction, c.last_transaction), 1) AS tenure_months,
+        ROUND(c.total_transactions / GREATEST(TIMESTAMPDIFF(MONTH, c.first_transaction, c.last_transaction), 1), 2) AS avg_transactions_per_month
     FROM 
         customer_transactions c
     JOIN 
         users_customuser u ON u.id = c.owner_id
 ),
+
 categorized AS (
+    -- Categorize customers based on transaction frequency
     SELECT 
         *,
         CASE 
@@ -42,7 +44,8 @@ categorized AS (
     FROM 
         transactions_per_month
 )
--- Final aggregation by frequency category
+
+-- Aggregate results by frequency category
 SELECT 
     frequency_category,
     COUNT(*) AS customer_count,
@@ -51,5 +54,6 @@ FROM
     categorized
 GROUP BY 
     frequency_category
+-- Ensure logical display order
 ORDER BY 
     FIELD(frequency_category, 'High Frequency', 'Medium Frequency', 'Low Frequency');
