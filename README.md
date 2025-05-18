@@ -10,11 +10,12 @@ This repository contains solutions to the SQL Proficiency Assessment designed to
 
 DataAnalytics-Assessment/
 │
-├── Assessment_Q1.sql # High-Value Customers with Multiple Products
-├── Assessment_Q2.sql # Transaction Frequency Analysis
-├── Assessment_Q3.sql # Account Inactivity Alert
-├── Assessment_Q4.sql # Customer Lifetime Value (CLV) Estimation
-└── README.md # Approach, explanation, and challenges
+├── Assessment_Q1.sql          # High-Value Customers with Multiple Products
+├── Assessment_Q2.sql          # Transaction Frequency Analysis
+├── Assessment_Q3.sql          # Account Inactivity Alert
+├── Assessment_Q4.sql          # Customer Lifetime Value (CLV) Estimation
+└── README.md                  # Approach, explanation, and challenges
+
 
 
 ---
