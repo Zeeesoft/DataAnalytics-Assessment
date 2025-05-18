@@ -15,6 +15,7 @@ DataAnalytics-Assessment/
 ├── Assessment_Q2.sql │  Transaction Frequency Analysis 
 ├── Assessment_Q3.sql │  Account Inactivity Alert 
 ├── Assessment_Q4.sql │  Customer Lifetime Value (CLV) Estimation 
+│
 └── README.md         │  Approach, explanation, and challenges </pre>
 ---
 
